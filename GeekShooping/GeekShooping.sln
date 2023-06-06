@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{DBF900B2-B014-44BA-8FD5-0D04BFD58D01}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{8A00B90D-5AEC-40E3-B78F-C1BAA515A5A9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeekShopping.Web", "GeekShopping.Web\GeekShopping.Web.csproj", "{37A553AA-AFA6-465E-846C-173F7DC87487}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6EC0C78F-F32E-4561-8582-200AEA945BE3} = {6EC0C78F-F32E-4561-8582-200AEA945BE3}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeekShooping.ProductAPI", "GeekShooping.ProductAPI\GeekShooping.ProductAPI.csproj", "{6EC0C78F-F32E-4561-8582-200AEA945BE3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37A553AA-AFA6-465E-846C-173F7DC87487}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37A553AA-AFA6-465E-846C-173F7DC87487}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37A553AA-AFA6-465E-846C-173F7DC87487}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37A553AA-AFA6-465E-846C-173F7DC87487}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EC0C78F-F32E-4561-8582-200AEA945BE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EC0C78F-F32E-4561-8582-200AEA945BE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EC0C78F-F32E-4561-8582-200AEA945BE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EC0C78F-F32E-4561-8582-200AEA945BE3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{37A553AA-AFA6-465E-846C-173F7DC87487} = {DBF900B2-B014-44BA-8FD5-0D04BFD58D01}
+		{6EC0C78F-F32E-4561-8582-200AEA945BE3} = {8A00B90D-5AEC-40E3-B78F-C1BAA515A5A9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {78DE3FEF-6751-4C1B-A958-339254F9ADF2}
+	EndGlobalSection
+EndGlobal
