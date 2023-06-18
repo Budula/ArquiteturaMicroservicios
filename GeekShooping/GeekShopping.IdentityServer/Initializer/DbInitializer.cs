@@ -24,7 +24,7 @@ namespace GeekShopping.IdentityServer.Initializer
 
         public void Initialize()
         {
-            if (_role.FindByIdAsync(IdentityConfiguration.Admin).Result != null) return;
+            if (_role.FindByNameAsync(IdentityConfiguration.Admin).Result != null) return;
             _role.CreateAsync(new IdentityRole(
                 IdentityConfiguration.Admin)).GetAwaiter().GetResult();
             _role.CreateAsync(new IdentityRole(
@@ -55,7 +55,7 @@ namespace GeekShopping.IdentityServer.Initializer
             ApplicationUser client = new ApplicationUser()
             {
                 UserName = "william-client",
-                Email = "william-admin@test.com.br",
+                Email = "william-client@test.com.br",
                 EmailConfirmed = true,
                 PhoneNumber = "+55 (11) 12345-1234",
                 FirstName = "William",
@@ -68,7 +68,7 @@ namespace GeekShopping.IdentityServer.Initializer
 
             var clientClaims = _user.AddClaimsAsync(client, new Claim[]
             {
-                new Claim(JwtClaimTypes.Name, $"{client.FirstName} {admin.LastName}"),
+                new Claim(JwtClaimTypes.Name, $"{client.FirstName} {client.LastName}"),
                 new Claim(JwtClaimTypes.GivenName, client.FirstName),
                 new Claim(JwtClaimTypes.FamilyName, client.LastName),
                 new Claim(JwtClaimTypes.Role, IdentityConfiguration.Client)
