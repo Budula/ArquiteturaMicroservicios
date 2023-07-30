@@ -47,7 +47,7 @@ namespace GeekShooping.ProductAPI.Controllers
 
         [Authorize]
         [HttpPut]
-        public async Task<ActionResult<ProductVO>> FindById([FromBody] ProductVO product)
+        public async Task<ActionResult<ProductVO>> Update([FromBody] ProductVO product)
         {
             if (product == null) return BadRequest();
             product = await _productRepository.Update(product);
