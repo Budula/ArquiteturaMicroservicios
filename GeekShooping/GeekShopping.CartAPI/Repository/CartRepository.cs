@@ -37,6 +37,7 @@ namespace GeekShopping.CartAPI.Repository
             return false;
         }
 
+
         public async Task<CartVO> FindCartByUserId(string userId)
         {
             Cart cart = new()
@@ -47,11 +48,7 @@ namespace GeekShopping.CartAPI.Repository
                 .Where(c => c.CartHeaderId == cart.CartHeader.Id).Include(c => c.Product);
             return  _mapper.Map<CartVO>(cart);
         }
-
-        public Task<CartVO> GetCartByUserId(string userId)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public Task<bool> RemoveCoupon(string userId)
         {

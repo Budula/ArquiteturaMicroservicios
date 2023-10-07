@@ -15,20 +15,19 @@ namespace GeekShopping.CartAPI.Controllers
         {
             _repository = cartRepository ?? throw new
                         ArgumentNullException(nameof(cartRepository));
-        }
-
+        }       
         [HttpGet("find-cart/{id}")]
         [Authorize]
-        public async Task<ActionResult<CartVO>> FindById(string userId)
+        public async Task<ActionResult<CartVO>> FindById(string id)
         {
-            var cart = await _repository.FindCartByUserId(userId);
+            var cart = await _repository.FindCartByUserId(id);
             if (cart == null) return NotFound();
             return Ok(cart);
         }
 
         [Authorize]
         [HttpPost("add-cart")]
-        public async Task<ActionResult<ProductVO>> AddCart([FromBody] CartVO cartVo)
+        public async Task<ActionResult<CartVO>> AddCart(CartVO cartVo)
         {
             if (cartVo == null) return BadRequest();
             cartVo = await _repository.SaveOrUpdateCart(cartVo);
@@ -37,7 +36,7 @@ namespace GeekShopping.CartAPI.Controllers
 
         [Authorize]
         [HttpPut("update-cart")]
-        public async Task<ActionResult<ProductVO>> UpdateCart([FromBody] CartVO cartVo)
+        public async Task<ActionResult<CartVO>> UpdateCart(CartVO cartVo)
         {
             if (cartVo == null) return BadRequest();
             cartVo = await _repository.SaveOrUpdateCart(cartVo);
@@ -46,7 +45,7 @@ namespace GeekShopping.CartAPI.Controllers
 
         [HttpDelete("remove-cart{id}")]
        // [Authorize(Roles = Role.Admin)]
-        public async Task<ActionResult<ProductVO>> Delete(long id)
+        public async Task<ActionResult<CartVO>> Delete(long id)
         {
             var status = await _repository.RemoveFromCart(id);
             if (!status) return BadRequest();
