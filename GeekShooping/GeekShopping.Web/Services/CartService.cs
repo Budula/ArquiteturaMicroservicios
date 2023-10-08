@@ -50,11 +50,22 @@ namespace GeekShopping.Web.Services
             else throw new Exception("Something went worng when calling API");
         }
         
-        public Task<bool> ApplyCoupon(CartViewModel cart, string couponCode, string token)
+        public async Task<bool> ApplyCoupon(CartViewModel cart, string token)
         {
-            throw new NotImplementedException();
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _httpClient.PostAsJsonAsync($"{BasePath}/apply-coupon", cart);
+            if (response.IsSuccessStatusCode)
+                return await response.ReadContentAs<bool>();
+            else throw new Exception("Something went worng when calling API");
         }
-
+        public async Task<bool> RemoveCoupon(string userId, string token)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _httpClient.DeleteAsync($"{BasePath}/remove-coupon/{userId}");
+            if (response.IsSuccessStatusCode)
+                return await response.ReadContentAs<bool>();
+            else throw new Exception("Something went worng when calling API");
+        }
         public Task<CartViewModel> Checkout(CartHeaderViewModel cartHeader, string token)
         {
             throw new NotImplementedException();
@@ -64,14 +75,5 @@ namespace GeekShopping.Web.Services
         {
             throw new NotImplementedException();
         }
-
-      
-
-        public Task<bool> RemoveCoupon(string userId, string token)
-        {
-            throw new NotImplementedException();
-        }
-
-      
     }
 }
