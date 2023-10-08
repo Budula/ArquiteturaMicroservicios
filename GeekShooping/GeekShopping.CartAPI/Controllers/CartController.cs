@@ -43,7 +43,7 @@ namespace GeekShopping.CartAPI.Controllers
             return Ok(cartVo);
         }
 
-        [HttpDelete("remove-cart{id}")]
+        [HttpDelete("remove-cart/{id}")]
        // [Authorize(Roles = Role.Admin)]
         public async Task<ActionResult<CartVO>> Delete(long id)
         {
