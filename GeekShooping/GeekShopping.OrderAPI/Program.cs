@@ -1,8 +1,6 @@
-using AutoMapper;
-using GeekShooping.CartAPI.Config;
-using GeekShooping.CartAPI.Model.Context;
-using GeekShopping.CartAPI.RabbitMQSender;
+using GeekShooping.OrderAPI.Model.Context;
 using GeekShopping.CartAPI.Repository;
+using GeekShopping.OrderAPI.MessageConsumer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -13,12 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration.GetConnectionString("MySQlConnectionString");
 builder.Services.AddDbContext<MySQLContext>(options => options.
                            UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 33))));
-//Configuring Automapper
-IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-builder.Services.AddSingleton(mapper);
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<ICartRepository, CartRepository>();
-builder.Services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
+////Configuring Automapper
+//IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+//builder.Services.AddSingleton(mapper);
+//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+var contextBuilder = new DbContextOptionsBuilder<MySQLContext>();
+contextBuilder.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 33)));
+builder.Services.AddSingleton(new OrderRepository(contextBuilder.Options));
+
+//builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddHostedService<RabbitMQCheckoutConsumer>();
+//builder.Services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
 builder.Services.AddControllers();
 
 builder.Services.AddAuthentication("Bearer")
@@ -44,7 +47,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GeekShopping.CartAPI", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GeekShopping.OrderAPI", Version = "v1" });
     c.EnableAnnotations();
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -71,6 +74,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
