@@ -39,7 +39,7 @@ namespace GeekShopping.OrderAPI.MessageConsumer
                 ProcessOrder(vo).GetAwaiter().GetResult();
                 _channel.BasicAck(evt.DeliveryTag, false);
             };
-            _channel.BasicConsume("checkouqueue", false, consumer);
+            _channel.BasicConsume("checkoutqueue", false, consumer);
             return Task.CompletedTask;
         }
 
