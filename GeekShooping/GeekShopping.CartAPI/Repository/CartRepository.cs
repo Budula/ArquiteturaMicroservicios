@@ -39,7 +39,7 @@ namespace GeekShopping.CartAPI.Repository
                     _context.CartDetail.Where(c => c.CartHeaderId == cartHeader.Id)
                     );
                 _context.CartHeader.Remove(cartHeader);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return true;
             }
             return false;
@@ -50,7 +50,8 @@ namespace GeekShopping.CartAPI.Repository
         {
             Cart cart = new()
             {
-                CartHeader = await _context.CartHeader.FirstOrDefaultAsync(c => c.UserId == userId),
+                CartHeader = await _context.CartHeader
+                .FirstOrDefaultAsync(c => c.UserId == userId) ?? new CartHeader(),
             };
             cart.CartDetails = _context.CartDetail
                 .Where(c => c.CartHeaderId == cart.CartHeader.Id).Include(c => c.Product);

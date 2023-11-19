@@ -1,6 +1,7 @@
 ﻿using GeekShopping.CartAPI.Repository;
 using GeekShopping.OrderAPI.Messages;
 using GeekShopping.OrderAPI.Model;
+using GeekShopping.OrderAPI.RabbitMQSender;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -13,10 +14,12 @@ namespace GeekShopping.OrderAPI.MessageConsumer
         private readonly OrderRepository _repository;
         private IConnection _connection;
         private IModel _channel;
+        private IRabbitMQMessageSender _rabbitMQMessageSender;
 
-        public RabbitMQCheckoutConsumer(OrderRepository repository)
+        public RabbitMQCheckoutConsumer(OrderRepository repository, IRabbitMQMessageSender rabbitMQMessageSender)
         {
             _repository = repository;
+            _rabbitMQMessageSender = rabbitMQMessageSender;
             var factory = new ConnectionFactory
             {
                 HostName = "localhost",
@@ -52,7 +55,7 @@ namespace GeekShopping.OrderAPI.MessageConsumer
                 LastName = vo.LastName,
                 OrderDetails = new List<OrderDetail>(),
                 CardNumber = vo.CardNumber,
-                CartTotalItems = vo.CartTotalItems,
+                CartTotalItems = vo.CartTotalItems??0,
                 CouponCode = vo.CouponCode,
                 CVV = vo.CVV,
                 Date = vo.Time,
@@ -80,6 +83,26 @@ namespace GeekShopping.OrderAPI.MessageConsumer
             }
 
             await _repository.AddOrder(orderHeader);
+
+            PaymentVo payment = new()
+            {
+                Name = orderHeader.FirstName + " " + orderHeader.LastName,
+                CardNumber = orderHeader.CardNumber,
+                CVV = orderHeader.CVV,
+                Email = orderHeader.Email,
+                ExpiryMonthYear = orderHeader.ExpiryMonthYear,
+                OrderId = orderHeader.Id,
+                PurchaseAmount = orderHeader.PurchaseAmount
+            };
+            try
+            {
+                _rabbitMQMessageSender.SendMessage(payment, "orderpaymentprocessqueue");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }
